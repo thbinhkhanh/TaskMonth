@@ -30,6 +30,37 @@ function MainContent() {
     handleDeleteTask 
   } = useTasks();
 
+  // 🎯 Lọc danh sách công việc khớp chính xác với tháng và năm được chọn trên Header
+  const filteredTasks = tasks.filter(task => {
+    const taskDateValue = task.date || task.dueDate || task.createdAt;
+    if (!taskDateValue) return false;
+
+    let taskDate;
+    if (typeof taskDateValue === 'string') {
+      // Xử lý định dạng DD-MM-YYYY hoặc DD-MM-YYYY HH:mm:ss
+      const datePart = taskDateValue.split(' ')[0];
+      const parts = datePart.split('-');
+      if (parts.length === 3) {
+        // Chuyển đổi thành YYYY-MM-DD để JavaScript nhận diện chính xác
+        taskDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      } else {
+        taskDate = new Date(taskDateValue);
+      }
+    } else if (typeof taskDateValue.toDate === 'function') {
+      // Hỗ trợ trường hợp là Firestore Timestamp
+      taskDate = taskDateValue.toDate();
+    } else {
+      taskDate = new Date(taskDateValue);
+    }
+
+    if (isNaN(taskDate.getTime())) return false;
+
+    return (
+      taskDate.getMonth() === selectedMonth.getMonth() &&
+      taskDate.getFullYear() === selectedMonth.getFullYear()
+    );
+  });
+
   return (
     <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-lg shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
       <Header 
@@ -40,17 +71,18 @@ function MainContent() {
 
       {activeTab === 'log' ? (
         <TaskLogTab 
-          tasks={tasks}
+          tasks={filteredTasks}  // 👈 Truyền mảng đã lọc vào đây để hiển thị đúng dữ liệu theo tháng
           loading={loading}
           onToggle={handleToggleTask}
           onDateChange={handleTaskDateChange}
           onAddTask={handleAddTask}
           onDelete={handleDeleteTask}
           onUpdateTitle={handleUpdateTitle}
+          selectedMonth={selectedMonth}
         />
       ) : (
         <StatsTab 
-          tasks={tasks} 
+          tasks={filteredTasks}  // 👈 Truyền mảng đã lọc vào đây cho phần thống kê
           selectedMonth={selectedMonth} 
         />
       )}

@@ -2,7 +2,7 @@ import React from 'react';
 import TaskItem from './TaskItem';
 import TaskForm from './TaskForm';
 
-export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask, onDelete, onUpdateTitle }) {
+export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask, onDelete, onUpdateTitle, selectedMonth }) {
   return (
     <div className="flex-1 flex flex-col min-h-0 relative">
       {/* Thêm class 'no-scrollbar' vào đây để ẩn thanh cuộn */}
@@ -32,7 +32,7 @@ export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onA
         )}
       </main>
 
-      <TaskForm onAddTask={onAddTask} />
+      <TaskForm onAddTask={onAddTask} selectedMonth={selectedMonth} />
     </div>
   );
 }
