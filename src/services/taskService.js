@@ -5,6 +5,7 @@ import {
   onSnapshot, 
   setDoc, 
   updateDoc, 
+  deleteDoc, 
   doc, 
   query, 
   orderBy, 
@@ -70,4 +71,19 @@ export const updateTaskDate = async (taskId, field, dateValue) => {
   }
 
   await updateDoc(taskRef, updateData);
+};
+
+// 5. Cập nhật tên công việc
+export const updateTaskTitle = async (taskId, newTitle) => {
+  if (!newTitle.trim()) return;
+  const taskRef = doc(db, TASKS_COLLECTION, taskId);
+  await updateDoc(taskRef, {
+    title: newTitle.trim()
+  });
+};
+
+// 6. Xóa công việc
+export const deleteTask = async (taskId) => {
+  const taskRef = doc(db, TASKS_COLLECTION, taskId);
+  await deleteDoc(taskRef);
 };

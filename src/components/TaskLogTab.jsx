@@ -2,7 +2,7 @@ import React from 'react';
 import TaskItem from './TaskItem';
 import TaskForm from './TaskForm';
 
-export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask }) {
+export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask, onDelete, onUpdateTitle }) {
   return (
     <div className="flex-1 flex flex-col min-h-0 relative">
       <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-48">
@@ -22,7 +22,9 @@ export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onA
                 key={task.id} 
                 task={task} 
                 onToggle={onToggle} 
-                onDateChange={onDateChange} 
+                onDateChange={onDateChange}
+                onDelete={onDelete}
+                onUpdateTitle={onUpdateTitle}
               />
             ))}
           </div>

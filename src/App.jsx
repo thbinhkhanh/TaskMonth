@@ -8,7 +8,9 @@ import {
   subscribeTasks, 
   addTask, 
   toggleTaskDone, 
-  updateTaskDate 
+  updateTaskDate,
+  updateTaskTitle,
+  deleteTask 
 } from './services/taskService';
 
 // Import Components
@@ -62,9 +64,26 @@ export default function App() {
     }
   };
 
+  // Handler cập nhật tên task
+  const handleUpdateTitle = async (taskId, newTitle) => {
+    try {
+      await updateTaskTitle(taskId, newTitle);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật tên công việc:", error);
+    }
+  };
+
+  // Handler xóa task
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+    } catch (error) {
+      console.error("Lỗi khi xóa công việc:", error);
+    }
+  };
+
   return (
     <div className="bg-white min-h-screen text-slate-100 font-sans antialiased flex justify-center items-center p-4">
-      {/* Dynamic Style cho DatePicker */}
       <style>{`
         .react-datepicker { background-color: #0f172a; border-color: #334155; color: #f8fafc; font-family: inherit; font-size: 12px; }
         .react-datepicker__header { background-color: #1e293b; border-bottom-color: #334155; }
@@ -74,17 +93,14 @@ export default function App() {
         .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected { background-color: #6366f1 !important; color: white; }
       `}</style>
 
-      {/* Khung mô phỏng di động */}
       <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-lg shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
         
-        {/* Header */}
         <Header 
           activeTab={activeTab} 
           selectedMonth={selectedMonth} 
           setSelectedMonth={setSelectedMonth} 
         />
 
-        {/* Nội dung theo Tab */}
         {activeTab === 'log' ? (
           <TaskLogTab 
             tasks={tasks}
@@ -92,6 +108,8 @@ export default function App() {
             onToggle={handleToggleTask}
             onDateChange={handleTaskDateChange}
             onAddTask={handleAddTask}
+            onDelete={handleDeleteTask}
+            onUpdateTitle={handleUpdateTitle}
           />
         ) : (
           <StatsTab 
@@ -100,7 +118,6 @@ export default function App() {
           />
         )}
 
-        {/* Navigation Bar */}
         <Navigation 
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
