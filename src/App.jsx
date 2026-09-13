@@ -75,17 +75,8 @@ export default function App() {
       `}</style>
 
       {/* Khung mô phỏng di động */}
-      <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-[36px] shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
+      <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-lg shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
         
-        {/* Status Bar */}
-        <div className="bg-slate-950 px-6 pt-3 pb-1 flex justify-between items-center text-xs text-slate-400 font-semibold select-none z-20 shrink-0">
-          <span>18:33</span>
-          <div className="flex items-center gap-1.5">
-            <span>📶</span>
-            <span>🔋 85%</span>
-          </div>
-        </div>
-
         {/* Header */}
         <Header 
           activeTab={activeTab} 
