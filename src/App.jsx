@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { registerLocale } from 'react-datepicker';
 import { vi } from 'date-fns/locale/vi';
 import 'react-datepicker/dist/react-datepicker.css';
 
-// Import Services
-import { 
-  subscribeTasks, 
-  addTask, 
-  toggleTaskDone, 
-  updateTaskDate,
-  updateTaskTitle,
-  deleteTask 
-} from './services/taskService';
+// Import TaskProvider và custom hook
+import { TaskProvider, useTasks } from './context/TaskContext';
 
 // Import Components
 import Header from './components/Header';
@@ -21,67 +14,57 @@ import Navigation from './components/Navigation';
 
 registerLocale('vi', vi);
 
-export default function App() {
+// Component con bên trong để tận dụng useTasks()
+function MainContent() {
   const [activeTab, setActiveTab] = useState('log');
   const [selectedMonth, setSelectedMonth] = useState(new Date());
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Đăng ký nhận dữ liệu từ Firestore
-  useEffect(() => {
-    const unsubscribe = subscribeTasks((tasksData) => {
-      setTasks(tasksData);
-      setLoading(false);
-    });
+  // Lấy toàn bộ state và hàm xử lý trực tiếp từ TaskProvider (Context + LocalStorage + Firestore)
+  const { 
+    tasks, 
+    loading, 
+    handleAddTask, 
+    handleToggleTask, 
+    handleTaskDateChange, 
+    handleUpdateTitle, 
+    handleDeleteTask 
+  } = useTasks();
 
-    return () => unsubscribe();
-  }, []);
+  return (
+    <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-lg shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
+      <Header 
+        activeTab={activeTab} 
+        selectedMonth={selectedMonth} 
+        setSelectedMonth={setSelectedMonth} 
+      />
 
-  // Handler xử lý thêm task
-  const handleAddTask = async (newTaskData) => {
-    try {
-      await addTask(newTaskData);
-    } catch (error) {
-      console.error("Lỗi khi thêm công việc:", error);
-    }
-  };
+      {activeTab === 'log' ? (
+        <TaskLogTab 
+          tasks={tasks}
+          loading={loading}
+          onToggle={handleToggleTask}
+          onDateChange={handleTaskDateChange}
+          onAddTask={handleAddTask}
+          onDelete={handleDeleteTask}
+          onUpdateTitle={handleUpdateTitle}
+        />
+      ) : (
+        <StatsTab 
+          tasks={tasks} 
+          selectedMonth={selectedMonth} 
+        />
+      )}
 
-  // Handler đổi trạng thái task
-  const handleToggleTask = async (task) => {
-    try {
-      await toggleTaskDone(task);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật trạng thái:", error);
-    }
-  };
+      <Navigation 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+      />
+    </div>
+  );
+}
 
-  // Handler thay đổi ngày của task
-  const handleTaskDateChange = async (taskId, field, dateValue) => {
-    try {
-      await updateTaskDate(taskId, field, dateValue);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật ngày:", error);
-    }
-  };
-
-  // Handler cập nhật tên task
-  const handleUpdateTitle = async (taskId, newTitle) => {
-    try {
-      await updateTaskTitle(taskId, newTitle);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật tên công việc:", error);
-    }
-  };
-
-  // Handler xóa task
-  const handleDeleteTask = async (taskId) => {
-    try {
-      await deleteTask(taskId);
-    } catch (error) {
-      console.error("Lỗi khi xóa công việc:", error);
-    }
-  };
-
+// Component App chính bọc TaskProvider bên ngoài
+export default function App() {
   return (
     <div className="bg-white min-h-screen text-slate-100 font-sans antialiased flex justify-center items-center p-4">
       <style>{`
@@ -93,36 +76,9 @@ export default function App() {
         .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected { background-color: #6366f1 !important; color: white; }
       `}</style>
 
-      <div className="w-full max-w-md bg-slate-950 h-[800px] rounded-lg shadow-2xl border-4 border-slate-800 overflow-hidden flex flex-col justify-between relative">
-        
-        <Header 
-          activeTab={activeTab} 
-          selectedMonth={selectedMonth} 
-          setSelectedMonth={setSelectedMonth} 
-        />
-
-        {activeTab === 'log' ? (
-          <TaskLogTab 
-            tasks={tasks}
-            loading={loading}
-            onToggle={handleToggleTask}
-            onDateChange={handleTaskDateChange}
-            onAddTask={handleAddTask}
-            onDelete={handleDeleteTask}
-            onUpdateTitle={handleUpdateTitle}
-          />
-        ) : (
-          <StatsTab 
-            tasks={tasks} 
-            selectedMonth={selectedMonth} 
-          />
-        )}
-
-        <Navigation 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-        />
-      </div>
+      <TaskProvider>
+        <MainContent />
+      </TaskProvider>
     </div>
   );
 }
