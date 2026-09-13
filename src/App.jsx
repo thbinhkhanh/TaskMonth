@@ -103,6 +103,20 @@ export default function App() {
   return (
     <div className="bg-white min-h-screen text-slate-100 font-sans antialiased flex justify-center items-center p-4">
       <style>{`
+        /* 🎯 Căn giữa popup lịch hoàn hảo trên mọi màn hình (mobile & desktop) */
+        .react-datepicker-popper {
+          position: fixed !important;
+          top: 50% !important;
+          left: 50% !important;
+          transform: translate(-50%, -50%) !important;
+          z-index: 99999 !important;
+        }
+
+        /* Ẩn mũi tên tam giác định hướng của react-datepicker */
+        .react-datepicker__triangle {
+          display: none !important;
+        }
+
         /* Khung tổng thể popup lịch */
         .react-datepicker { 
           background-color: #0f172a; 
@@ -110,7 +124,7 @@ export default function App() {
           color: #f8fafc; 
           font-family: inherit; 
           border-radius: 16px; 
-          box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+          box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.7);
           overflow: hidden; 
           padding: 12px;
         }
