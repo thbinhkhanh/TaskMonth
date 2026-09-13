@@ -1,0 +1,35 @@
+import React from 'react';
+import TaskItem from './TaskItem';
+import TaskForm from './TaskForm';
+
+export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask }) {
+  return (
+    <div className="flex-1 flex flex-col min-h-0 relative">
+      <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-48">
+        <div className="flex justify-between items-center text-[11px] text-slate-400 font-bold uppercase tracking-wider px-1">
+          <span>Danh sách công việc</span>
+          <span className="bg-indigo-950 text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-900/50">
+            {tasks.length} công việc
+          </span>
+        </div>
+
+        {loading ? (
+          <div className="text-center text-xs text-slate-500 py-8">Đang tải dữ liệu từ Firestore...</div>
+        ) : (
+          <div className="space-y-2.5">
+            {tasks.map((task) => (
+              <TaskItem 
+                key={task.id} 
+                task={task} 
+                onToggle={onToggle} 
+                onDateChange={onDateChange} 
+              />
+            ))}
+          </div>
+        )}
+      </main>
+
+      <TaskForm onAddTask={onAddTask} />
+    </div>
+  );
+}
