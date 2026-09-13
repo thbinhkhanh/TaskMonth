@@ -100,12 +100,81 @@ export default function App() {
   return (
     <div className="bg-white min-h-screen text-slate-100 font-sans antialiased flex justify-center items-center p-4">
       <style>{`
-        .react-datepicker { background-color: #0f172a; border-color: #334155; color: #f8fafc; font-family: inherit; font-size: 12px; }
-        .react-datepicker__header { background-color: #1e293b; border-bottom-color: #334155; }
-        .react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header, .react-datepicker__day-name { color: #cbd5e1; }
-        .react-datepicker__day { color: #e2e8f0; }
-        .react-datepicker__day:hover { background-color: #334155; }
-        .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected { background-color: #6366f1 !important; color: white; }
+        /* Khung tổng thể popup lịch */
+        .react-datepicker { 
+          background-color: #0f172a; 
+          border: 1px solid #334155; 
+          color: #f8fafc; 
+          font-family: inherit; 
+          border-radius: 16px; 
+          box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+          overflow: hidden; 
+          padding: 12px;
+        }
+        .react-datepicker__header { 
+          background-color: transparent; 
+          border-bottom: none; 
+          padding-top: 4px; 
+        }
+        .react-datepicker__current-month { 
+          color: #f8fafc; 
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+        
+        /* 🎯 Lưới chọn tháng phong cách Windows (3 cột x 4 hàng đều đặn) */
+        .react-datepicker__month-year-wrapper {
+          display: flex;
+          flex-direction: column;
+        }
+        .react-datepicker__month-wrapper {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 10px; 
+          margin-bottom: 10px;
+        }
+        
+        /* Từng ô chọn tháng */
+        .react-datepicker__month-text {
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          background-color: #1e293b; 
+          border: 1px solid transparent;
+          border-radius: 10px;
+          padding: 12px 0 !important;
+          margin: 0 !important;
+          font-size: 13px;
+          font-weight: 500;
+          color: #cbd5e1;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .react-datepicker__month-text:hover { 
+          background-color: #334155; 
+          color: #ffffff;
+          border-color: #475569;
+        }
+        .react-datepicker__month-text--selected, 
+        .react-datepicker__month-text--keyboard-selected { 
+          background-color: #6366f1 !important; 
+          color: #ffffff !important;
+          font-weight: 600;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Nút chuyển năm (Trái / Phải) */
+        .react-datepicker__navigation {
+          top: 18px;
+        }
+        .react-datepicker__navigation-icon::before {
+          border-color: #94a3b8;
+          border-width: 2px 2px 0 0;
+        }
+        .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+          border-color: #ffffff;
+        }
       `}</style>
 
       <TaskProvider>
