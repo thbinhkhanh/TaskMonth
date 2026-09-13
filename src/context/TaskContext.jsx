@@ -22,7 +22,8 @@ export function TaskProvider({ children }) {
     }
   });
 
-  const [loading, setLoading] = useState(tasks.length === 0);
+  // 🎯 Đặt loading là false ngay từ đầu để không bị chờ mạng khi mở app
+  const [loading, setLoading] = useState(false);
 
   // 2. Tự động lưu vào localStorage mỗi khi tasks thay đổi
   useEffect(() => {
@@ -33,11 +34,18 @@ export function TaskProvider({ children }) {
     }
   }, [tasks]);
 
-  // 3. Lắng nghe ngầm Firestore để cập nhật dữ liệu mới nhất từ cloud
+  // 3. Lắng nghe ngầm Firestore tối ưu để không gây giật lag
   useEffect(() => {
     const unsubscribe = subscribeTasks((tasksData) => {
-      if (tasksData && tasksData.length > 0) {
-        setTasks(tasksData);
+      if (tasksData) {
+        setTasks(prevTasks => {
+          // Chỉ cập nhật state nếu dữ liệu từ cloud thực sự khác biệt 
+          // tránh việc re-render nặng nề gây chậm app
+          if (JSON.stringify(prevTasks) !== JSON.stringify(tasksData)) {
+            return tasksData;
+          }
+          return prevTasks;
+        });
       }
       setLoading(false);
     });
