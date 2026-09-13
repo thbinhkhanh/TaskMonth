@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'; // 👈 Thêm useMemo ở đây
+import React, { useState, useMemo } from 'react';
 import { registerLocale } from 'react-datepicker';
 import { vi } from 'date-fns/locale/vi';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -126,6 +126,32 @@ export default function App() {
           margin-bottom: 8px;
         }
         
+        /* 🎯 Khôi phục và làm đẹp màu sắc cho lịch chọn ngày chi tiết (Day picker) */
+        .react-datepicker__day-name { 
+          color: #94a3b8; 
+          font-weight: 600;
+          width: 2rem;
+        }
+        .react-datepicker__day { 
+          color: #e2e8f0; 
+          border-radius: 8px;
+          width: 2rem;
+          line-height: 2rem;
+          margin: 0.2rem;
+        }
+        .react-datepicker__day:hover { 
+          background-color: #334155; 
+          color: #ffffff;
+        }
+        .react-datepicker__day--selected, 
+        .react-datepicker__day--keyboard-selected { 
+          background-color: #6366f1 !important; 
+          color: white !important; 
+        }
+        .react-datepicker__day--outside-month {
+          color: #475569 !important;
+        }
+
         /* 🎯 Lưới chọn tháng phong cách Windows (3 cột x 4 hàng đều đặn) */
         .react-datepicker__month-year-wrapper {
           display: flex;
