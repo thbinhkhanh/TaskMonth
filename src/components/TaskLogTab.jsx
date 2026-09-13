@@ -5,7 +5,8 @@ import TaskForm from './TaskForm';
 export default function TaskLogTab({ tasks, loading, onToggle, onDateChange, onAddTask, onDelete, onUpdateTitle }) {
   return (
     <div className="flex-1 flex flex-col min-h-0 relative">
-      <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-48">
+      {/* Thêm class 'no-scrollbar' vào đây để ẩn thanh cuộn */}
+      <main className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4 pb-48">
         <div className="flex justify-between items-center text-[11px] text-slate-400 font-bold uppercase tracking-wider px-1">
           <span>Danh sách công việc</span>
           <span className="bg-indigo-950 text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-900/50">
