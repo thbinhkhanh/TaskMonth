@@ -17,7 +17,8 @@ export default function Header({ activeTab, selectedMonth, setSelectedMonth }) {
         dateFormat="MM/yyyy"
         showMonthYearPicker
         locale="vi"
-        className="bg-slate-900/90 border border-slate-700/70 hover:border-slate-600 rounded-lg px-3 py-1.5 text-xs font-semibold text-indigo-300 text-center outline-none transition cursor-pointer shadow-sm"
+        wrapperClassName="w-28 sm:w-auto"
+        className="w-full bg-slate-900/90 border border-slate-700/70 hover:border-slate-600 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-indigo-300 text-center outline-none transition cursor-pointer shadow-sm"
       />
     </header>
   );
