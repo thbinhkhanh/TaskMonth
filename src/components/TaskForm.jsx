@@ -1,57 +1,100 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useTheme } from '../App';
 
-export default function TaskForm({ onAddTask }) {
-  const [taskText, setTaskText] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
+export default function TaskForm({ onAddTask, selectedMonth }) {
+  const { isDarkMode } = useTheme();
+  
+  const [title, setTitle] = useState('');
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!taskText.trim()) return;
+    if (!title.trim()) return;
 
-    onAddTask({ title: taskText, startDate, endDate });
+    // Format ngày sang chuỗi DD-MM-YYYY
+    const formatDate = (date) => {
+      if (!date) return '';
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
 
-    setTaskText('');
-    setStartDate(new Date());
-    setEndDate(null);
+    onAddTask({
+      title,
+      fromDate: formatDate(fromDate),
+      toDate: formatDate(toDate),
+      dueDate: '',
+      createdAt: selectedMonth
+    });
+
+    setTitle('');
+    setFromDate(null);
+    setToDate(null);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="absolute bottom-0 left-0 right-0 bg-slate-950 border-t border-slate-800/80 p-3 z-10 space-y-2.5">
-      <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-slate-300">Bắt đầu:</label>
+    <form 
+      onSubmit={handleSubmit} 
+      className={`absolute bottom-0 left-0 right-0 p-4 border-t shadow-lg transition-colors duration-300 ${
+        isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+      }`}
+    >
+      {/* 2 cột thời gian (Từ ngày, Đến ngày) */}
+      <div className="grid grid-cols-2 gap-2 mb-2.5 text-xs">
+        <div>
+          <label className={`block mb-1 font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Từ ngày:</label>
           <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            dateFormat="dd/MM/yyyy"
-            locale="vi"
-            className="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded-lg px-2 py-1 text-center outline-none focus:border-indigo-500 cursor-pointer"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-slate-300">Hoàn thành:</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
+            selected={fromDate}
+            onChange={(date) => setFromDate(date)}
             dateFormat="dd/MM/yyyy"
             locale="vi"
             placeholderText="Chọn ngày"
-            className="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded-lg px-2 py-1 text-center outline-none focus:border-indigo-500 cursor-pointer"
+            className={`w-full p-2 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+              isDarkMode 
+                ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
+                : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
+            }`}
+          />
+        </div>
+
+        <div>
+          <label className={`block mb-1 font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Đến ngày:</label>
+          <DatePicker
+            selected={toDate}
+            onChange={(date) => setToDate(date)}
+            dateFormat="dd/MM/yyyy"
+            locale="vi"
+            placeholderText="Chọn ngày"
+            className={`w-full p-2 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+              isDarkMode 
+                ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
+                : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
+            }`}
           />
         </div>
       </div>
-      
-      <div className="flex gap-2">
-        <input 
-          type="text"
-          value={taskText}
-          onChange={(e) => setTaskText(e.target.value)}
-          placeholder="Nhập nội dung công việc..." 
-          className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+
+      {/* Ô nhập tên công việc tự động co giãn xuống dòng */}
+      <div className="flex gap-2 items-end">
+        <textarea 
+          rows="2"
+          value={title} 
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Nhập nội dung công việc (cho phép xuống dòng)..."
+          className={`flex-1 p-2.5 rounded-xl border text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            isDarkMode 
+              ? 'bg-slate-950 border-slate-700 text-slate-100 placeholder-slate-500' 
+              : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
+          }`}
         />
-        <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-md transition shrink-0">
+        <button 
+          type="submit"
+          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm shadow-md transition-all h-[42px] flex items-center justify-center shrink-0"
+        >
           Thêm
         </button>
       </div>

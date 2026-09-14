@@ -15,6 +15,15 @@ import { generateTaskId } from '../utils/dateUtils';
 
 const TASKS_COLLECTION = 'tasks';
 
+// Hàm phụ lấy ngày hiện tại định dạng DD-MM-YYYY
+const getCurrentDateString = () => {
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
 // 1. Lắng nghe dữ liệu realtime
 export const subscribeTasks = (onDataLoaded) => {
   const q = query(collection(db, TASKS_COLLECTION), orderBy('createdAt', 'desc'));
@@ -25,8 +34,6 @@ export const subscribeTasks = (onDataLoaded) => {
       return {
         id: docSnap.id,
         ...data,
-        startDate: data.startDate ? data.startDate.toDate() : new Date(),
-        endDate: data.endDate ? data.endDate.toDate() : null,
       };
     });
     onDataLoaded(tasksData);
@@ -34,15 +41,16 @@ export const subscribeTasks = (onDataLoaded) => {
 };
 
 // 2. Thêm mới công việc
-export const addTask = async ({ title, startDate, endDate }) => {
+export const addTask = async ({ title, fromDate = '', toDate = '' }) => {
   if (!title.trim()) return;
   const customId = generateTaskId();
 
   await setDoc(doc(db, TASKS_COLLECTION, customId), {
-    title,
-    startDate: Timestamp.fromDate(startDate || new Date()),
-    endDate: endDate ? Timestamp.fromDate(endDate) : null,
-    done: Boolean(endDate),
+    title: title.trim(),
+    fromDate: fromDate || '',
+    toDate: toDate || '',
+    dueDate: '',
+    done: false,
     createdAt: Timestamp.now()
   });
 };
@@ -51,22 +59,23 @@ export const addTask = async ({ title, startDate, endDate }) => {
 export const toggleTaskDone = async (task) => {
   const taskRef = doc(db, TASKS_COLLECTION, task.id);
   const isNowDone = !task.done;
-  const newEndDate = isNowDone ? (task.endDate || new Date()) : null;
+  const newDueDate = isNowDone ? (task.dueDate || getCurrentDateString()) : '';
 
   await updateDoc(taskRef, {
     done: isNowDone,
-    endDate: newEndDate ? Timestamp.fromDate(newEndDate) : null
+    dueDate: newDueDate
   });
 };
 
-// 4. Cập nhật ngày bắt đầu / kết thúc
+// 4. Cập nhật ngày (fromDate, toDate, dueDate)
 export const updateTaskDate = async (taskId, field, dateValue) => {
   const taskRef = doc(db, TASKS_COLLECTION, taskId);
   const updateData = {
-    [field]: dateValue ? Timestamp.fromDate(dateValue) : null
+    [field]: dateValue || ''
   };
   
-  if (field === 'endDate') {
+  // Nếu cập nhật ô "dueDate" (Hoàn thành), tự động đồng bộ trạng thái done
+  if (field === 'dueDate') {
     updateData.done = Boolean(dateValue);
   }
 
