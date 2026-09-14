@@ -63,7 +63,7 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
             dateFormat="dd/MM/yyyy"
             locale="vi"
             placeholderText="Chọn ngày"
-            className={`w-28 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+            className={`w-24 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
               isDarkMode 
                 ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
                 : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
@@ -79,7 +79,7 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
             dateFormat="dd/MM/yyyy"
             locale="vi"
             placeholderText="Chọn ngày"
-            className={`w-20 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+            className={`w-24 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
               isDarkMode 
                 ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
                 : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
