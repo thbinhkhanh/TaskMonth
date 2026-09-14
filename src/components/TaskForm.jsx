@@ -53,17 +53,17 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
         isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
       }`}
     >
-      {/* 2 cột thời gian (Từ ngày, Đến ngày) */}
+      {/* 2 cột thời gian (Từ ngày, Đến ngày) dạng nằm ngang */}
       <div className="grid grid-cols-2 gap-2 mb-2.5 text-xs">
-        <div>
-          <label className={`block mb-1 font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Từ ngày:</label>
+        <div className="flex items-center gap-1.5">
+          <label className={`font-medium text-[11px] shrink-0 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Từ ngày:</label>
           <DatePicker
             selected={fromDate}
             onChange={(date) => setFromDate(date)}
             dateFormat="dd/MM/yyyy"
             locale="vi"
             placeholderText="Chọn ngày"
-            className={`w-full p-2 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+            className={`w-28 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
               isDarkMode 
                 ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
                 : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
@@ -71,15 +71,15 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
           />
         </div>
 
-        <div>
-          <label className={`block mb-1 font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Đến ngày:</label>
+        <div className="flex items-center gap-1.5">
+          <label className={`font-medium text-[11px] shrink-0 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Đến ngày:</label>
           <DatePicker
             selected={toDate}
             onChange={(date) => setToDate(date)}
             dateFormat="dd/MM/yyyy"
             locale="vi"
             placeholderText="Chọn ngày"
-            className={`w-full p-2 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
+            className={`w-28 p-1.5 rounded-lg border text-center text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer ${
               isDarkMode 
                 ? 'bg-slate-950 border-slate-700 text-slate-200 placeholder-slate-600' 
                 : 'bg-slate-50 border-slate-300 text-slate-800 placeholder-slate-400'
@@ -104,7 +104,7 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
         />
         <button 
           type="submit"
-          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm shadow-md transition-all h-[42px] flex items-center justify-center shrink-0 self-start"
+          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm shadow-md transition-all h-[42px] flex items-center justify-center shrink-0 self-start cursor-pointer"
         >
           Thêm
         </button>
