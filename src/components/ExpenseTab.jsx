@@ -228,7 +228,7 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
               Chưa có dữ liệu chi tiêu để hiển thị biểu đồ.
             </div>
           ) : (
-            <div className="flex items-end justify-between gap-2 h-40 pt-6 px-1">
+            <div className="flex items-end justify-between gap-2 h-44 pt-6 px-1">
               {categoryStats.map((stat) => {
                 const heightPercent = Math.max(Math.round((stat.total / maxCategoryTotal) * 100), 18);
                 
@@ -249,12 +249,16 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                       className={`w-full max-w-[32px] bg-gradient-to-t ${stat.color} transition-all duration-500 shadow-md group-hover/bar:brightness-110`}
                     />
                     
-                    <div className="flex items-center space-x-1 mt-2 max-w-full">
+                    {/* Hiển thị đầy đủ nhãn bằng cách cho phép xuống dòng thay vì cắt cụt */}
+                    <div className="flex items-center justify-center space-x-1 mt-2 w-full">
                       <span className={`w-2 h-2 rounded-full flex-shrink-0 ${stat.dot}`} />
-                      <span className={`text-[10px] truncate max-w-[45px] sm:max-w-[60px] text-center ${
-                        isDarkMode ? 'text-slate-400' : 'text-slate-600'
-                      }`} title={stat.category}>
-                        {stat.category.split(' ')[0]}
+                      <span 
+                        className={`text-[10px] leading-tight text-center line-clamp-2 ${
+                          isDarkMode ? 'text-slate-400' : 'text-slate-600'
+                        }`} 
+                        title={stat.category}
+                      >
+                        {stat.category}
                       </span>
                     </div>
                   </div>
@@ -375,7 +379,6 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
           </div>
         ) : (
           sortedDateGroups.map((group) => {
-            // Tính tổng tiền trong ngày để hiển thị ở tiêu đề nhóm
             const groupTotal = group.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
             return (
@@ -394,7 +397,7 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                   </span>
                 </div>
 
-                {/* Các item thuộc ngày này (Đã lược bỏ hiển thị ngày trùng lặp bên trong từng item) */}
+                {/* Các item thuộc ngày này */}
                 <div className="space-y-2">
                   {group.items.map((item) => {
                     const isEditing = editingId === item.id;
