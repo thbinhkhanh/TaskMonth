@@ -34,7 +34,7 @@ export const useTheme = () => useContext(ThemeContext);
 function MainContent() {
   const [activeTab, setActiveTab] = useState('log');
   const [selectedMonth, setSelectedMonth] = useState(new Date());
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   // Lấy toàn bộ state và hàm xử lý trực tiếp từ TaskProvider (Context + LocalStorage + Firestore)
   const { 
@@ -48,7 +48,6 @@ function MainContent() {
   } = useTasks();
 
   // 🎯 TỐI ƯU HIỆU NĂNG: Dùng useMemo để cache kết quả lọc theo tháng/năm
-  // 🎯 TỐI ƯU HIỆU NĂNG & SỬA LỖI HIỂN THỊ: Lọc task chính xác theo tháng được chọn
   const filteredTasks = useMemo(() => {
     const targetMonth = selectedMonth.getMonth();
     const targetYear = selectedMonth.getFullYear();
@@ -94,9 +93,10 @@ function MainContent() {
       isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
     }`}>
       <Header 
-        activeTab={activeTab} 
         selectedMonth={selectedMonth} 
         setSelectedMonth={setSelectedMonth} 
+        isDarkMode={isDarkMode}
+        toggleTheme={toggleTheme}
       />
 
       {activeTab === 'log' ? (
@@ -136,26 +136,12 @@ export default function App() {
 
 // Component trung gian để nhận trạng thái theme và đổi màu nền tổng thể ngoài khung app
 function AppWrapper() {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode } = useTheme();
 
   return (
     <div className={`min-h-screen font-sans antialiased flex flex-col justify-center items-center p-4 transition-colors duration-300 ${
       isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-800'
     }`}>
-      {/* Nút chuyển đổi Sáng / Tối nổi phía trên ứng dụng hoặc tích hợp gọn gàng */}
-      <div className="w-full max-w-md flex justify-end mb-2">
-        <button 
-          onClick={toggleTheme}
-          className={`px-3 py-1.5 rounded-lg border text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 ${
-            isDarkMode 
-              ? 'bg-slate-800 border-slate-700 text-amber-400 hover:bg-slate-700' 
-              : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
-          }`}
-        >
-          {isDarkMode ? '☀️ Chế độ Sáng' : '🌙 Chế độ Tối'}
-        </button>
-      </div>
-
       <style>{`
         /* 🎯 Căn giữa popup lịch hoàn hảo trên mọi màn hình (mobile & desktop) */
         .react-datepicker-popper {
