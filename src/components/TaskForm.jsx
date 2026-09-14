@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { useTheme } from '../App';
 
@@ -8,6 +8,16 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
   const [title, setTitle] = useState('');
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const textareaRef = useRef(null);
+
+  // Tự động điều chỉnh chiều cao của textarea dựa trên nội dung (chỉ tăng, xuống dòng)
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reset lại chiều cao để tính toán chính xác
+      textarea.style.height = `${textarea.scrollHeight}px`; // Đặt theo chiều cao thực tế của nội dung
+    }
+  }, [title]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,14 +88,15 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
         </div>
       </div>
 
-      {/* Ô nhập tên công việc tự động co giãn xuống dòng */}
-      <div className="flex gap-2 items-end">
+      {/* Ô nhập nội dung và nút Thêm căn chỉnh top bằng nhau */}
+      <div className="flex gap-2 items-start">
         <textarea 
-          rows="2"
+          ref={textareaRef}
+          rows="1"
           value={title} 
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Nhập nội dung công việc (cho phép xuống dòng)..."
-          className={`flex-1 p-2.5 rounded-xl border text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+          placeholder="Nhập nội dung công việc..."
+          className={`flex-1 p-2.5 rounded-xl border text-sm resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[42px] leading-relaxed ${
             isDarkMode 
               ? 'bg-slate-950 border-slate-700 text-slate-100 placeholder-slate-500' 
               : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
@@ -93,7 +104,7 @@ export default function TaskForm({ onAddTask, selectedMonth }) {
         />
         <button 
           type="submit"
-          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm shadow-md transition-all h-[42px] flex items-center justify-center shrink-0"
+          className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm shadow-md transition-all h-[42px] flex items-center justify-center shrink-0 self-start"
         >
           Thêm
         </button>
