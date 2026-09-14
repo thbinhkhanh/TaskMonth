@@ -6,7 +6,7 @@ export default function Header({ selectedMonth, setSelectedMonth, isDarkMode, to
     <header className="bg-slate-950 border-b border-slate-800 px-5 py-3.5 flex justify-between items-center z-10 shrink-0">
       <div>
         <h1 className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
-          <span>🎯</span> TaskMonth
+          <span>🎯</span> MoneyMonth
         </h1>
       </div>
       

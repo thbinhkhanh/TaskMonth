@@ -9,7 +9,6 @@ import { TaskProvider, useTasks } from './context/TaskContext';
 // Import Components
 import Header from './components/Header';
 import TaskLogTab from './components/TaskLogTab';
-import ExpenseTab from './components/ExpenseTab';
 import StatsTab from './components/StatsTab';
 import Navigation from './components/Navigation';
 
@@ -40,19 +39,15 @@ function MainContent() {
   // Lấy toàn bộ state và hàm xử lý trực tiếp từ TaskProvider (Context + LocalStorage + Firestore)
   const { 
     tasks, 
-    expenses,
     loading, 
     handleAddTask, 
     handleToggleTask, 
     handleTaskDateChange, 
     handleUpdateTitle, 
-    handleDeleteTask,
-    handleAddExpense,
-    handleUpdateExpense,
-    handleDeleteExpense
+    handleDeleteTask 
   } = useTasks();
 
-  // 🎯 TỐI ƯU HIỆU NĂNG: Dùng useMemo để cache kết quả lọc task theo tháng/năm
+  // 🎯 TỐI ƯU HIỆU NĂNG: Dùng useMemo để cache kết quả lọc theo tháng/năm
   const filteredTasks = useMemo(() => {
     const targetMonth = selectedMonth.getMonth();
     const targetYear = selectedMonth.getFullYear();
@@ -93,35 +88,6 @@ function MainContent() {
     });
   }, [tasks, selectedMonth]);
 
-  // 🎯 TỐI ƯU HIỆU NĂNG: Dùng useMemo để cache kết quả lọc chi tiêu theo tháng/năm
-  const filteredExpenses = useMemo(() => {
-    const targetMonth = selectedMonth.getMonth();
-    const targetYear = selectedMonth.getFullYear();
-
-    return expenses.filter(item => {
-      // Hỗ trợ đọc cả trường date chuẩn lẫn createdAt định dạng "DD-MM-YYYY HH-mm-ss"
-      const dateValue = item.date || item.createdAt;
-      if (!dateValue) return true;
-
-      let expenseDate;
-      if (typeof dateValue === 'string' && dateValue.includes('-') && dateValue.includes(' ')) {
-        // Xử lý chuỗi định dạng "DD-MM-YYYY HH-mm-ss"
-        const datePart = dateValue.split(' ')[0];
-        const [d, m, y] = datePart.split('-');
-        expenseDate = new Date(`${y}-${m}-${d}`);
-      } else {
-        expenseDate = new Date(dateValue);
-      }
-
-      if (isNaN(expenseDate.getTime())) return true;
-
-      return (
-        expenseDate.getMonth() === targetMonth &&
-        expenseDate.getFullYear() === targetYear
-      );
-    });
-  }, [expenses, selectedMonth]);
-
   return (
     <div className={`w-full max-w-md h-[840px] rounded-2xl shadow-2xl border flex flex-col justify-between relative overflow-hidden transition-colors duration-300 ${
       isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
@@ -143,13 +109,6 @@ function MainContent() {
           onDelete={handleDeleteTask}
           onUpdateTitle={handleUpdateTitle}
           selectedMonth={selectedMonth}
-        />
-      ) : activeTab === 'expense' ? (
-        <ExpenseTab 
-          expenses={filteredExpenses}
-          onAddExpense={handleAddExpense}
-          onUpdateExpense={handleUpdateExpense}
-          onDeleteExpense={handleDeleteExpense}
         />
       ) : (
         <StatsTab 
