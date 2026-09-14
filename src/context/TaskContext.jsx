@@ -7,15 +7,16 @@ import {
   updateTaskTitle as apiUpdateTaskTitle,
   deleteTask as apiDeleteTask 
 } from '../services/taskService';
+import { sortTasksByFromDateDesc } from '../utils/dateUtils';
 
 const TaskContext = createContext();
 
 export function TaskProvider({ children }) {
-  // 1. Khởi tạo state bằng localStorage để hiển thị tức thì (0ms)
+  // 1. Khởi tạo state bằng localStorage và sort luôn dữ liệu ban đầu
   const [tasks, setTasks] = useState(() => {
     try {
       const savedTasks = localStorage.getItem('taskmonth_tasks');
-      return savedTasks ? JSON.parse(savedTasks) : [];
+      return savedTasks ? sortTasksByFromDateDesc(JSON.parse(savedTasks)) : [];
     } catch (error) {
       console.error("Lỗi đọc localStorage:", error);
       return [];
@@ -34,15 +35,16 @@ export function TaskProvider({ children }) {
     }
   }, [tasks]);
 
-  // 3. Lắng nghe ngầm Firestore tối ưu để không gây giật lag
+  // 3. Lắng nghe ngầm Firestore tối ưu và tự động sort dữ liệu nhận về
   useEffect(() => {
     const unsubscribe = subscribeTasks((tasksData) => {
       if (tasksData) {
+        const sortedCloudTasks = sortTasksByFromDateDesc(tasksData);
         setTasks(prevTasks => {
           // Chỉ cập nhật state nếu dữ liệu từ cloud thực sự khác biệt 
           // tránh việc re-render nặng nề gây chậm app
-          if (JSON.stringify(prevTasks) !== JSON.stringify(tasksData)) {
-            return tasksData;
+          if (JSON.stringify(prevTasks) !== JSON.stringify(sortedCloudTasks)) {
+            return sortedCloudTasks;
           }
           return prevTasks;
         });
@@ -53,7 +55,7 @@ export function TaskProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
-  // Handler Thêm task (Optimistic Update)
+  // Handler Thêm task (Optimistic Update - kết hợp sort lại danh sách)
   const handleAddTask = async (newTaskData) => {
     const tempId = 'local_' + Date.now();
     const optimisticTask = {
@@ -63,7 +65,7 @@ export function TaskProvider({ children }) {
       createdAt: new Date().toISOString()
     };
 
-    setTasks(prev => [optimisticTask, ...prev]);
+    setTasks(prev => sortTasksByFromDateDesc([optimisticTask, ...prev]));
 
     try {
       await apiAddTask(newTaskData);
@@ -78,7 +80,9 @@ export function TaskProvider({ children }) {
     const previousTasks = [...tasks];
     const newDoneState = !task.done;
 
-    setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: newDoneState } : t));
+    setTasks(prev => sortTasksByFromDateDesc(
+      prev.map(t => t.id === task.id ? { ...t, done: newDoneState } : t)
+    ));
 
     try {
       await apiToggleTaskDone(task);
@@ -88,11 +92,13 @@ export function TaskProvider({ children }) {
     }
   };
 
-  // Handler Thay đổi ngày
+  // Handler Thay đổi ngày (Sắp xếp lại ngay khi ngày thay đổi để task tự chạy đúng vị trí)
   const handleTaskDateChange = async (taskId, field, dateValue) => {
     const previousTasks = [...tasks];
 
-    setTasks(prev => prev.map(t => t.id === taskId ? { ...t, [field]: dateValue } : t));
+    setTasks(prev => sortTasksByFromDateDesc(
+      prev.map(t => t.id === taskId ? { ...t, [field]: dateValue } : t)
+    ));
 
     try {
       await apiUpdateTaskDate(taskId, field, dateValue);
