@@ -816,7 +816,11 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                                 </button>
 
                                 {showEditDatePicker && (
-                                  <div className="absolute right-0 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
+                                  <div
+                                    className="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50
+                                              shadow-2xl rounded-xl overflow-hidden
+                                              border border-slate-200 bg-white"
+                                  >
                                     <DatePicker
                                       selected={editDate}
                                       onChange={(d) => {
