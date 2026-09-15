@@ -280,7 +280,7 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Nhập nội dung chi tiêu (VD: Phở bò, Tiền điện...)"
+              placeholder="Nhập nội dung chi tiêu"
               className={`w-full pl-9 pr-3 py-2 text-sm rounded-xl border outline-none transition-all ${
                 isDarkMode 
                   ? 'bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
