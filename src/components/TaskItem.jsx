@@ -8,6 +8,9 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title || '');
 
+  // State quản lý hiển thị popup lịch cho từng trường: null | 'from' | 'to' | 'due'
+  const [activeDatePicker, setActiveDatePicker] = useState(null);
+
   // Ref để tự động điều chỉnh chiều cao textarea theo nội dung
   const textareaRef = useRef(null);
 
@@ -15,6 +18,17 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
   const [editedFromDate, setEditedFromDate] = useState(task.fromDate || task.startDate || task.from || task.start || '');
   const [editedToDate, setEditedToDate] = useState(task.toDate || task.end || task.to || '');
   const [editedDueDate, setEditedDueDate] = useState(task.dueDate || task.endDate || task.date || task.completeDate || task.completedDate || '');
+
+  // Đóng popup lịch khi click ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.datepicker-container')) {
+        setActiveDatePicker(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Tự động điều chỉnh chiều cao của textarea khi bật chế độ sửa hoặc khi nội dung thay đổi
   useEffect(() => {
@@ -70,21 +84,21 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
   };
 
   const handleSave = () => {
-    // 1. Lưu tiêu đề nếu có thay đổi
     if (editedTitle.trim() && onUpdateTitle) {
       onUpdateTitle(task.id, editedTitle.trim());
     }
-    // 2. Lưu thông tin ngày tháng cho cả 3 trường
     if (onDateChange) {
       onDateChange(task.id, 'fromDate', editedFromDate);
       onDateChange(task.id, 'toDate', editedToDate);
       onDateChange(task.id, 'dueDate', editedDueDate);
     }
     setIsEditing(false);
+    setActiveDatePicker(null);
   };
 
   const handleCancel = () => {
     setIsEditing(false);
+    setActiveDatePicker(null);
     setEditedTitle(task.title);
     setEditedFromDate(task.fromDate || task.startDate || task.from || task.start || '');
     setEditedToDate(task.toDate || task.end || task.to || '');
@@ -93,7 +107,6 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && e.ctrlKey) {
-      // Cho phép dùng Ctrl + Enter để lưu nhanh
       e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
@@ -106,6 +119,13 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
     if (isConfirmed && onDelete) {
       onDelete(task.id);
     }
+  };
+
+  // Helper hiển thị chuỗi ngày tháng đẹp mắt trên input giả lập
+  const getDisplayDateText = (dateVal) => {
+    const parsed = parseDateValue(dateVal);
+    if (!parsed) return '---';
+    return formatDateToString(parsed);
   };
 
   return (
@@ -194,51 +214,87 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
           isDarkMode ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-500'
         }`}>
           {/* Từ ngày */}
-          <div className={`p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
+          <div className={`relative datepicker-container p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
             <span className="block text-[10px] opacity-70 mb-1">Từ ngày</span>
-            <DatePicker
-              selected={parseDateValue(isEditing ? editedFromDate : (task.fromDate || task.startDate || task.from || task.start))}
-              onChange={(date) => setEditedFromDate(formatDateToString(date))}
-              dateFormat="dd/MM/yyyy"
-              locale="vi"
-              placeholderText="---"
-              disabled={!isEditing}
-              className={`w-full bg-transparent text-center font-semibold outline-none ${
-                isEditing ? 'cursor-pointer border-b border-indigo-500' : 'cursor-default'
-              } ${isDarkMode ? 'text-slate-200 placeholder-slate-600' : 'text-slate-700 placeholder-slate-400'}`}
-            />
+            <div
+              onClick={() => isEditing && setActiveDatePicker(activeDatePicker === 'from' ? null : 'from')}
+              className={`w-full bg-transparent text-center font-semibold outline-none py-0.5 ${
+                isEditing ? 'cursor-pointer border-b border-indigo-500 hover:opacity-80' : 'cursor-default'
+              } ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}
+            >
+              {getDisplayDateText(isEditing ? editedFromDate : (task.fromDate || task.startDate || task.from || task.start))}
+            </div>
+
+            {/* Popup lịch Win 11 cho Từ ngày */}
+            {isEditing && activeDatePicker === 'from' && (
+              <div className="absolute left-0 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white p-1">
+                <DatePicker
+                  selected={parseDateValue(editedFromDate)}
+                  onChange={(date) => {
+                    setEditedFromDate(formatDateToString(date));
+                    setActiveDatePicker(null);
+                  }}
+                  inline
+                  locale="vi"
+                />
+              </div>
+            )}
           </div>
 
           {/* Đến ngày */}
-          <div className={`p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
+          <div className={`relative datepicker-container p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
             <span className="block text-[10px] opacity-70 mb-1">Đến ngày</span>
-            <DatePicker
-              selected={parseDateValue(isEditing ? editedToDate : (task.toDate || task.end || task.to))}
-              onChange={(date) => setEditedToDate(formatDateToString(date))}
-              dateFormat="dd/MM/yyyy"
-              locale="vi"
-              placeholderText="---"
-              disabled={!isEditing}
-              className={`w-full bg-transparent text-center font-semibold outline-none ${
-                isEditing ? 'cursor-pointer border-b border-indigo-500' : 'cursor-default'
-              } ${isDarkMode ? 'text-slate-200 placeholder-slate-600' : 'text-slate-700 placeholder-slate-400'}`}
-            />
+            <div
+              onClick={() => isEditing && setActiveDatePicker(activeDatePicker === 'to' ? null : 'to')}
+              className={`w-full bg-transparent text-center font-semibold outline-none py-0.5 ${
+                isEditing ? 'cursor-pointer border-b border-indigo-500 hover:opacity-80' : 'cursor-default'
+              } ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}
+            >
+              {getDisplayDateText(isEditing ? editedToDate : (task.toDate || task.end || task.to))}
+            </div>
+
+            {/* Popup lịch Win 11 cho Đến ngày */}
+            {isEditing && activeDatePicker === 'to' && (
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white p-1">
+                <DatePicker
+                  selected={parseDateValue(editedToDate)}
+                  onChange={(date) => {
+                    setEditedToDate(formatDateToString(date));
+                    setActiveDatePicker(null);
+                  }}
+                  inline
+                  locale="vi"
+                />
+              </div>
+            )}
           </div>
 
           {/* Hoàn thành */}
-          <div className={`p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
+          <div className={`relative datepicker-container p-1.5 rounded-lg text-center flex flex-col items-center ${isDarkMode ? 'bg-slate-950/60' : 'bg-slate-50'}`}>
             <span className="block text-[10px] opacity-70 mb-1">Hoàn thành</span>
-            <DatePicker
-              selected={parseDateValue(isEditing ? editedDueDate : (task.dueDate || task.endDate || task.date || task.completeDate || task.completedDate))}
-              onChange={(date) => setEditedDueDate(formatDateToString(date))}
-              dateFormat="dd/MM/yyyy"
-              locale="vi"
-              placeholderText="---"
-              disabled={!isEditing}
-              className={`w-full bg-transparent text-center font-semibold text-blue-500 outline-none ${
-                isEditing ? 'cursor-pointer border-b border-blue-500' : 'cursor-default'
+            <div
+              onClick={() => isEditing && setActiveDatePicker(activeDatePicker === 'due' ? null : 'due')}
+              className={`w-full bg-transparent text-center font-semibold text-blue-500 outline-none py-0.5 ${
+                isEditing ? 'cursor-pointer border-b border-blue-500 hover:opacity-80' : 'cursor-default'
               }`}
-            />
+            >
+              {getDisplayDateText(isEditing ? editedDueDate : (task.dueDate || task.endDate || task.date || task.completeDate || task.completedDate))}
+            </div>
+
+            {/* Popup lịch Win 11 cho Hoàn thành */}
+            {isEditing && activeDatePicker === 'due' && (
+              <div className="absolute right-0 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white p-1">
+                <DatePicker
+                  selected={parseDateValue(editedDueDate)}
+                  onChange={(date) => {
+                    setEditedDueDate(formatDateToString(date));
+                    setActiveDatePicker(null);
+                  }}
+                  inline
+                  locale="vi"
+                />
+              </div>
+            )}
           </div>
         </div>
 

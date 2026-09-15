@@ -1,6 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { useEffect, useRef } from 'react';
-
 import DatePicker from 'react-datepicker';
 import { 
   Plus, 
@@ -290,46 +288,6 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
 
     return Object.values(groups).sort((a, b) => b.rawDate - a.rawDate);
   }, [filteredExpenses]);
-
-  const datePickerRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        showDatePicker &&
-        datePickerRef.current &&
-        !datePickerRef.current.contains(event.target)
-      ) {
-        setShowDatePicker(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showDatePicker]);
-
-  const editDatePickerRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        showEditDatePicker &&
-        editDatePickerRef.current &&
-        !editDatePickerRef.current.contains(event.target)
-      ) {
-        setShowEditDatePicker(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showEditDatePicker]);
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden px-4 py-2">
@@ -682,7 +640,7 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
           </div>
 
           <div className="flex items-center justify-between pt-0.5">
-            <div ref={datePickerRef} className="relative">
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowDatePicker(prev => !prev)}
@@ -697,7 +655,7 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
               </button>
 
               {showDatePicker && (
-                <div className="absolute left-0 top-full mt-2 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
+                <div className="absolute left-0 top-full mt-2 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-700 bg-white dark:bg-slate-900">
                   <DatePicker
                     selected={date}
                     onChange={(d) => {
@@ -801,22 +759,19 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                                 ))}
                               </select>
 
-                              <div ref={editDatePickerRef} className="relative">
+                              <div className="relative">
                                 <button
                                   type="button"
                                   onClick={() => setShowEditDatePicker(prev => !prev)}
                                   className={`w-full px-2 py-1 text-[11px] rounded-lg border flex items-center justify-between ${
-                                    isDarkMode
-                                      ? 'bg-slate-950 border-slate-700 text-slate-200'
-                                      : 'bg-slate-50 border-slate-300 text-slate-800'
+                                    isDarkMode ? 'bg-slate-950 border-slate-700 text-slate-200' : 'bg-slate-50 border-slate-300 text-slate-800'
                                   }`}
                                 >
                                   <span>{editDate.toLocaleDateString('vi-VN')}</span>
                                   <Calendar className="w-2.5 h-2.5 text-indigo-500" />
                                 </button>
-
                                 {showEditDatePicker && (
-                                  <div className="absolute right-0 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
+                                  <div className="absolute right-0 top-full mt-1 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-700 bg-white dark:bg-slate-900">
                                     <DatePicker
                                       selected={editDate}
                                       onChange={(d) => {

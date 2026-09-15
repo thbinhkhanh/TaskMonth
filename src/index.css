@@ -22,3 +22,233 @@ body {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* =========================================================
+   REACT DATEPICKER - WINDOWS 11 STYLE (FINAL FIX DARK CELLS)
+   ========================================================= */
+
+.react-datepicker {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  color: #1f1f1f !important;
+  font-family: "Segoe UI", system-ui, sans-serif !important;
+  font-size: 13px !important;
+  overflow: hidden !important;
+  padding: 4px !important;
+}
+
+.react-datepicker__month-container,
+.react-datepicker__year-container {
+  float: none !important;
+  background: #ffffff !important;
+  color: #1f1f1f !important;
+}
+
+/* Phần đầu lịch */
+.react-datepicker__header {
+  background: #ffffff !important;
+  border-bottom: none !important;
+  padding-top: 12px !important;
+}
+
+/* Tháng / năm - Căn giữa chuẩn Win 11 */
+.react-datepicker__current-month,
+.react-datepicker__year-header {
+  color: #1f1f1f !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  margin-bottom: 12px !important;
+  padding: 0 !important;
+}
+
+.react-datepicker__day-names {
+  display: flex !important;
+  justify-content: space-around !important;
+}
+
+/* Tên thứ */
+.react-datepicker__day-name {
+  color: #5f5f5f !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  width: 36px !important;
+  line-height: 36px !important;
+  margin: 1px !important;
+}
+
+.react-datepicker__week {
+  display: flex !important;
+  justify-content: space-around !important;
+}
+
+/* Ô ngày */
+.react-datepicker__day {
+  color: #1f1f1f !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  margin: 1px !important;
+  border-radius: 50% !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Vòng tròn nhạt khi di chuột (Hover) vào ngày */
+.react-datepicker__day:hover {
+  background: #eaeaea !important;
+  color: #1f1f1f !important;
+  border-radius: 50% !important;
+}
+
+/* Ngày được chọn - Vòng tròn xanh Win 11 */
+.react-datepicker__day--selected {
+  background: #0067c0 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  border-radius: 50% !important;
+}
+
+/* Hover khi ngày đó đang được chọn */
+.react-datepicker__day--selected:hover {
+  background: #005a9e !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+}
+
+/* Ngày hôm nay */
+.react-datepicker__day--today {
+  font-weight: 600 !important;
+  color: #0067c0 !important;
+}
+
+/* Ngày hôm nay khi được chọn */
+.react-datepicker__day--today.react-datepicker__day--selected {
+  color: #ffffff !important;
+}
+
+/* Ngày ngoài tháng */
+.react-datepicker__day--outside-month {
+  color: #a0a0a0 !important;
+}
+
+/* Ngày bị vô hiệu hóa */
+.react-datepicker__day--disabled {
+  color: #c8c8c8 !important;
+}
+
+/* Nút tháng trước / sau */
+.react-datepicker__navigation {
+  top: 12px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 4px !important;
+}
+
+.react-datepicker__navigation--previous {
+  left: 12px !important;
+}
+
+.react-datepicker__navigation--next {
+  right: 12px !important;
+}
+
+/* Hover nút chuyển tháng */
+.react-datepicker__navigation:hover {
+  background: #f3f3f3 !important;
+}
+
+/* Mũi tên */
+.react-datepicker__navigation-icon::before {
+  border-color: #5f5f5f !important;
+  border-width: 1.5px 1.5px 0 0 !important;
+}
+
+/* Hover mũi tên */
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: #1f1f1f !important;
+}
+
+/* Khoảng cách phần ngày */
+.react-datepicker__month {
+  margin: 6px 8px 10px !important;
+  background: #ffffff !important;
+}
+
+/* Ngày được chọn bằng bàn phím */
+.react-datepicker__day--keyboard-selected {
+  background: #e5f1fb !important;
+  color: #0067c0 !important;
+  border-radius: 50% !important;
+}
+
+/* Khi hover ngày keyboard */
+.react-datepicker__day--keyboard-selected:hover {
+  background: #d6eaf8 !important;
+}
+
+/* Cuối tuần */
+.react-datepicker__day--weekend {
+  color: #1f1f1f !important;
+}
+
+/* =========================================================
+   GIAO DIỆN CHỌN THÁNG / NĂM (MONTH/YEAR VIEW) - FIX LỖI ĐEN NỀN
+   ========================================================= */
+
+.react-datepicker__current-month:hover {
+  background-color: #f3f3f3 !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+}
+
+/* Ép background bảng chọn tháng/năm sáng sủa, chống dính dark mode */
+.react-datepicker__month-wrapper,
+.react-datepicker__year-wrapper {
+  display: flex !important;
+  justify-content: space-around !important;
+  background-color: #ffffff !important;
+}
+
+.react-datepicker__month, 
+.react-datepicker__year {
+  background-color: #ffffff !important;
+  color: #1f1f1f !important;
+}
+
+/* Các ô chọn tháng hoặc năm */
+.react-datepicker__month-text,
+.react-datepicker__year-text {
+  background-color: #f8f9fa !important;
+  color: #1f1f1f !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
+  padding: 10px 0 !important;
+  margin: 4px !important;
+  font-weight: 500 !important;
+}
+
+/* Hover ô chọn tháng/năm */
+.react-datepicker__month-text:hover,
+.react-datepicker__year-text:hover {
+  background-color: #eaeaea !important;
+  color: #1f1f1f !important;
+  border-color: #d1d5db !important;
+}
+
+/* Tháng/Năm đang được chọn */
+.react-datepicker__month-text--selected,
+.react-datepicker__year-text--selected,
+.react-datepicker__month-text--keyboard-selected,
+.react-datepicker__year-text--keyboard-selected {
+  background-color: #0067c0 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-color: #0067c0 !important;
+  border-radius: 6px !important;
+}
