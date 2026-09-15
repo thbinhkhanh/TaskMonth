@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../App';
@@ -8,10 +8,21 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title || '');
 
+  // Ref để tự động điều chỉnh chiều cao textarea theo nội dung
+  const textareaRef = useRef(null);
+
   // State tạm thời để lưu ngày tháng khi đang ở chế độ chỉnh sửa
   const [editedFromDate, setEditedFromDate] = useState(task.fromDate || task.startDate || task.from || task.start || '');
   const [editedToDate, setEditedToDate] = useState(task.toDate || task.end || task.to || '');
   const [editedDueDate, setEditedDueDate] = useState(task.dueDate || task.endDate || task.date || task.completeDate || task.completedDate || '');
+
+  // Tự động điều chỉnh chiều cao của textarea khi bật chế độ sửa hoặc khi nội dung thay đổi
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [isEditing, editedTitle]);
 
   const parseDateValue = (val) => {
     if (!val) return null;
@@ -81,7 +92,8 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      // Cho phép dùng Ctrl + Enter để lưu nhanh
       e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
@@ -120,12 +132,16 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
           {isEditing ? (
             <div className="flex flex-col gap-2 flex-1">
               <textarea
-                rows="2"
+                ref={textareaRef}
                 value={editedTitle}
-                onChange={(e) => setEditedTitle(e.target.value)}
+                onChange={(e) => {
+                  setEditedTitle(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = `${e.target.scrollHeight}px`;
+                }}
                 onKeyDown={handleKeyDown}
                 autoFocus
-                className={`w-full border text-sm rounded-xl p-2 outline-none resize-none ${
+                className={`w-full border text-sm rounded-xl p-2.5 outline-none resize-none overflow-hidden leading-relaxed ${
                   isDarkMode 
                     ? 'bg-slate-800 border-indigo-500 text-slate-200' 
                     : 'bg-slate-50 border-indigo-500 text-slate-900'
@@ -157,7 +173,6 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
-                {/* Đã chỉnh lại màu sắc cho icon Xóa sang màu đỏ */}
                 <button 
                   onClick={handleDeleteClick}
                   className={`p-1.5 rounded-lg transition ${
@@ -232,13 +247,13 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
           <div className="flex gap-1.5 justify-end mt-2.5 pt-1">
             <button 
               onClick={handleSave}
-              className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-500 font-medium transition"
+              className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-500 font-medium transition"
             >
               Lưu thay đổi
             </button>
             <button 
               onClick={handleCancel}
-              className={`text-xs px-3 py-1 rounded-lg border transition ${
+              className={`text-xs px-3 py-1.5 rounded-lg border transition ${
                 isDarkMode ? 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200'
               }`}
             >
