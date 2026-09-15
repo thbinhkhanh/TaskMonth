@@ -332,452 +332,454 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
   }, [showEditDatePicker]);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden px-4 py-2">
-      
-      {/* THẺ TỔNG QUAN & CÔNG CỤ (ĐÃ CANH CHỈNH ĐỒNG BỘ TRÊN MOBILE) */}
-      <div className={`px-3.5 py-2.5 rounded-xl mb-2.5 border shadow-sm transition-colors ${
-        isDarkMode 
-          ? 'bg-slate-900/80 border-slate-800 text-slate-100' 
-          : 'bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border-indigo-100 text-slate-800'
-      }`}>
-        <div className="flex items-center justify-between gap-2">
-          {/* Cụm thông tin tổng chi tiêu bên trái */}
-          <div className="flex items-center space-x-2.5 min-w-0">
-            <div className={`p-2 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-600 text-white'}`}>
-              <Wallet className="w-4.5 h-4.5" />
-            </div>
-            <div className="min-w-0">
-              <p className={`text-[10px] font-medium uppercase tracking-wider truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                Tổng chi tiêu
-              </p>
-              <h2 className="text-lg sm:text-xl font-bold tracking-tight leading-tight truncate">
-                {formatMoney(totalExpense)}
-              </h2>
-            </div>
+  <div className="flex-1 flex flex-col overflow-hidden px-4 py-2">
+    
+    {/* THẺ TỔNG QUAN & CÔNG CỤ */}
+    <div className={`px-3.5 py-2.5 rounded-xl mb-2.5 border shadow-sm transition-colors ${
+      isDarkMode 
+        ? 'bg-slate-900/80 border-slate-800 text-slate-100' 
+        : 'bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border-indigo-100 text-slate-800'
+    }`}>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center space-x-2.5 min-w-0">
+          <div className={`p-2 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-600 text-white'}`}>
+            <Wallet className="w-4.5 h-4.5" />
           </div>
+          <div className="min-w-0">
+            <p className={`text-[10px] font-medium uppercase tracking-wider truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Tổng chi tiêu
+            </p>
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight leading-tight truncate">
+              {formatMoney(totalExpense)}
+            </h2>
+          </div>
+        </div>
 
-          {/* Cụm các nút công cụ phụ: Lọc, Biểu đồ, Xuất Excel (Cố định cùng một hàng, canh giữa chiều dọc) */}
-          <div className="flex items-center space-x-1.5 flex-shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowFilter(prev => !prev)}
-              title="Lọc và Tìm kiếm"
-              className={`p-1.5 rounded-lg border transition-all ${
-                showFilter || searchTerm || filterCategory !== 'ALL' || filterMonth !== 'ALL'
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
-                  : isDarkMode 
-                    ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
-                    : 'bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50 shadow-sm'
-              }`}
-            >
-              <Filter className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowChart(prev => !prev)}
-              title="Biểu đồ phân tích"
-              className={`p-1.5 rounded-lg border transition-all ${
-                showChart
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
-                  : isDarkMode 
-                    ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
-                    : 'bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50 shadow-sm'
-              }`}
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleExportCSV}
-              title="Xuất file CSV"
-              className={`p-1.5 rounded-lg border transition-all ${
-                isDarkMode 
+        <div className="flex items-center space-x-1.5 flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => setShowFilter(prev => !prev)}
+            title="Lọc và Tìm kiếm"
+            className={`p-1.5 rounded-lg border transition-all ${
+              showFilter || searchTerm || filterCategory !== 'ALL' || filterMonth !== 'ALL'
+                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
+                : isDarkMode 
                   ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
                   : 'bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50 shadow-sm'
-              }`}
-            >
-              <Download className="w-3.5 h-3.5" />
-            </button>
-          </div>
+            }`}
+          >
+            <Filter className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowChart(prev => !prev)}
+            title="Biểu đồ phân tích"
+            className={`p-1.5 rounded-lg border transition-all ${
+              showChart
+                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
+                : isDarkMode 
+                  ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
+                  : 'bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50 shadow-sm'
+            }`}
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportCSV}
+            title="Xuất file CSV"
+            className={`p-1.5 rounded-lg border transition-all ${
+              isDarkMode 
+                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
+                : 'bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50 shadow-sm'
+            }`}
+          >
+            <Download className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-2 pt-2 border-t border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+        <div className="flex items-center space-x-2">
+          <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+            Hạn mức tháng: <strong className={isDarkMode ? 'text-slate-200' : 'text-slate-800'}>{formatMoney(monthlyBudget)}</strong>
+          </span>
+          <button 
+            onClick={() => setIsEditingBudget(!isEditingBudget)}
+            className="text-[11px] text-indigo-500 hover:underline flex items-center space-x-0.5 font-medium"
+          >
+            <Settings className="w-3 h-3" />
+            <span>{isEditingBudget ? 'Đóng' : 'Đặt hạn mức mới'}</span>
+          </button>
         </div>
 
-        {/* DÒNG HẠN MỨC NGÂN SÁCH & CẢNH BÁO */}
-        <div className="mt-2 pt-2 border-t border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-          <div className="flex items-center space-x-2">
-            <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              Hạn mức tháng: <strong className={isDarkMode ? 'text-slate-200' : 'text-slate-800'}>{formatMoney(monthlyBudget)}</strong>
-            </span>
-            <button 
-              onClick={() => setIsEditingBudget(!isEditingBudget)}
-              className="text-[11px] text-indigo-500 hover:underline flex items-center space-x-0.5 font-medium"
-            >
-              <Settings className="w-3 h-3" />
-              <span>{isEditingBudget ? 'Đóng' : 'Đặt hạn mức mới'}</span>
-            </button>
+        {budgetPercentage >= 80 && (
+          <div className={`flex items-center space-x-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold border animate-pulse ${
+            budgetPercentage >= 100 
+              ? 'bg-rose-500/10 border-rose-500/30 text-rose-500' 
+              : 'bg-amber-500/10 border-amber-500/30 text-amber-500'
+          }`}>
+            <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+            <span>Đã dùng {budgetPercentage}% hạn mức!</span>
           </div>
-
-          {/* Cảnh báo vượt ngân sách */}
-          {budgetPercentage >= 80 && (
-            <div className={`flex items-center space-x-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold border animate-pulse ${
-              budgetPercentage >= 100 
-                ? 'bg-rose-500/10 border-rose-500/30 text-rose-500' 
-                : 'bg-amber-500/10 border-amber-500/30 text-amber-500'
-            }`}>
-              <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-              <span>Đã dùng {budgetPercentage}% hạn mức!</span>
-            </div>
-          )}
-        </div>
-
-        {/* Modal/Form chỉnh sửa hạn mức ngân sách nhanh */}
-        {isEditingBudget && (
-          <form onSubmit={handleSaveBudget} className="mt-2 pt-2 border-t border-indigo-500/10 flex items-center space-x-2">
-            <span className="text-xs font-medium">Nhập hạn mức mới (VNĐ):</span>
-            <input
-              type="text"
-              value={formatCurrencyInput(tempBudget)}
-              onChange={(e) => setTempBudget(e.target.value.replace(/\D/g, ''))}
-              className={`px-2 py-1 text-xs rounded-lg border outline-none ${
-                isDarkMode ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
-              }`}
-              placeholder="Nhập số tiền..."
-            />
-            <button type="submit" className="px-2.5 py-1 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-500">
-              Lưu
-            </button>
-            <button type="button" onClick={() => setIsEditingBudget(false)} className="px-2 py-1 bg-slate-500/20 text-slate-400 rounded-lg text-xs">
-              Hủy
-            </button>
-          </form>
         )}
       </div>
 
-      {/* THANH TÌM KIẾM VÀ BỘ LỌC (FILTER & SEARCH PANEL) */}
-      {showFilter && (
-        <div className={`p-3 rounded-xl border mb-2.5 shadow-sm animate-fadeIn transition-colors ${
-          isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}>
-          <div className="flex items-center justify-between mb-2">
-            <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Bộ lọc & Tìm kiếm nâng cao
-            </span>
-            {(searchTerm || filterCategory !== 'ALL' || filterMonth !== 'ALL') && (
-              <button 
-                onClick={() => { setSearchTerm(''); setFilterCategory('ALL'); setFilterMonth('ALL'); }}
-                className="text-xs text-rose-500 hover:underline"
-              >
-                Xóa bộ lọc
-              </button>
-            )}
+      {isEditingBudget && (
+        <form onSubmit={handleSaveBudget} className="mt-2 pt-2 border-t border-indigo-500/10 flex items-center space-x-2">
+          <span className="text-xs font-medium">Nhập hạn mức mới (VNĐ):</span>
+          <input
+            type="text"
+            value={formatCurrencyInput(tempBudget)}
+            onChange={(e) => setTempBudget(e.target.value.replace(/\D/g, ''))}
+            className={`px-2 py-1 text-xs rounded-lg border outline-none ${
+              isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+            }`}
+            placeholder="Nhập số tiền..."
+          />
+          <button type="submit" className="px-2.5 py-1 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-500">
+            Lưu
+          </button>
+          <button type="button" onClick={() => setIsEditingBudget(false)} className="px-2 py-1 bg-slate-500/20 text-slate-400 rounded-lg text-xs">
+            Hủy
+          </button>
+        </form>
+      )}
+    </div>
+
+    {/* THANH TÌM KIẾM VÀ BỘ LỌC */}
+    {showFilter && (
+      <div className={`p-3 rounded-xl border mb-2.5 shadow-sm animate-fadeIn transition-colors ${
+        isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'
+      }`}>
+        <div className="flex items-center justify-between mb-2">
+          <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+            Bộ lọc & Tìm kiếm nâng cao
+          </span>
+          {(searchTerm || filterCategory !== 'ALL' || filterMonth !== 'ALL') && (
+            <button 
+              onClick={() => { setSearchTerm(''); setFilterCategory('ALL'); setFilterMonth('ALL'); }}
+              className="text-xs text-rose-500 hover:underline"
+            >
+              Xóa bộ lọc
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="relative flex items-center">
+            <Search className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Tìm theo tên khoản chi..."
+              className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all ${
+                isDarkMode 
+                  ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500'
+              }`}
+            />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div className="relative flex items-center">
-              <Search className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Tìm theo tên khoản chi..."
-                className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all ${
-                  isDarkMode 
-                    ? 'bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500'
-                }`}
-              />
-            </div>
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
+              isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+            }`}
+          >
+            <option value="ALL">Tất cả danh mục</option>
+            {DEFAULT_CATEGORIES.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
 
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
-                isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+          <select
+            value={filterMonth}
+            onChange={(e) => setFilterMonth(e.target.value)}
+            className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
+              isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+            }`}
+          >
+            <option value="ALL">Tất cả các tháng</option>
+            {availableMonths.map(m => {
+              const [y, mm] = m.split('-');
+              return <option key={m} value={m}>Tháng {mm}/{y}</option>;
+            })}
+          </select>
+        </div>
+      </div>
+    )}
+
+    {/* KHU VỰC BIỂU ĐỒ */}
+    {showChart && (
+      <div className={`p-3 rounded-xl border mb-2.5 shadow-sm animate-fadeIn transition-colors ${
+        isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'
+      }`}>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center space-x-1.5">
+            <BarChart3 className={`w-3.5 h-3.5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+            <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+              Phân tích tỷ trọng chi tiêu
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-1 bg-slate-500/10 p-0.5 rounded-lg">
+            <button
+              onClick={() => setChartType('bar')}
+              className={`px-2 py-0.5 text-[10px] font-medium rounded transition-all ${
+                chartType === 'bar' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <option value="ALL">Tất cả danh mục</option>
-              {DEFAULT_CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-
-            <select
-              value={filterMonth}
-              onChange={(e) => setFilterMonth(e.target.value)}
-              className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
-                isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+              Cột
+            </button>
+            <button
+              onClick={() => setChartType('pie')}
+              className={`px-2 py-0.5 text-[10px] font-medium rounded transition-all ${
+                chartType === 'pie' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <option value="ALL">Tất cả các tháng</option>
-              {availableMonths.map(m => {
-                const [y, mm] = m.split('-');
-                return <option key={m} value={m}>Tháng {mm}/{y}</option>;
-              })}
-            </select>
+              Tròn (%)
+            </button>
           </div>
         </div>
-      )}
 
-      {/* KHU VỰC BIỂU ĐỒ (CỘT & TRÒN) */}
-      {showChart && (
-        <div className={`p-3 rounded-xl border mb-2.5 shadow-sm animate-fadeIn transition-colors ${
-          isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200'
-        }`}>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-1.5">
-              <BarChart3 className={`w-3.5 h-3.5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
-              <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-                Phân tích tỷ trọng chi tiêu
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-1 bg-slate-500/10 p-0.5 rounded-lg">
-              <button
-                onClick={() => setChartType('bar')}
-                className={`px-2 py-0.5 text-[10px] font-medium rounded transition-all ${
-                  chartType === 'bar' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Cột
-              </button>
-              <button
-                onClick={() => setChartType('pie')}
-                className={`px-2 py-0.5 text-[10px] font-medium rounded transition-all ${
-                  chartType === 'pie' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Tròn (%)
-              </button>
-            </div>
+        {categoryStats.length === 0 ? (
+          <div className="py-4 text-center text-xs text-slate-400">
+            Chưa có dữ liệu chi tiêu để hiển thị biểu đồ.
           </div>
+        ) : chartType === 'bar' ? (
+          <div className="flex items-end justify-between gap-2 h-36 pt-5 px-1">
+            {categoryStats.map((stat) => {
+              const heightPercent = Math.max(Math.round((stat.total / maxCategoryTotal) * 100), 18);
+              
+              return (
+                <div key={stat.category} className="flex-1 flex flex-col items-center h-full justify-end group/bar relative">
+                  <span className={`text-[9px] font-bold mb-1 truncate max-w-full tracking-tight ${
+                    isDarkMode ? 'text-slate-200' : 'text-slate-700'
+                  }`}>
+                    {formatShortMoney(stat.total)}
+                  </span>
 
-          {categoryStats.length === 0 ? (
-            <div className="py-4 text-center text-xs text-slate-400">
-              Chưa có dữ liệu chi tiêu để hiển thị biểu đồ.
-            </div>
-          ) : chartType === 'bar' ? (
-            <div className="flex items-end justify-between gap-2 h-36 pt-5 px-1">
-              {categoryStats.map((stat) => {
-                const heightPercent = Math.max(Math.round((stat.total / maxCategoryTotal) * 100), 18);
-                
-                return (
-                  <div key={stat.category} className="flex-1 flex flex-col items-center h-full justify-end group/bar relative">
-                    <span className={`text-[9px] font-bold mb-1 truncate max-w-full tracking-tight ${
-                      isDarkMode ? 'text-slate-200' : 'text-slate-700'
-                    }`}>
-                      {formatShortMoney(stat.total)}
+                  <div className="absolute -top-8 opacity-0 group-hover/bar:opacity-100 transition-opacity bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded shadow-xl pointer-events-none whitespace-nowrap z-20 border border-slate-700">
+                    <span className="font-semibold">{stat.category}</span>: {formatMoney(stat.total)}
+                  </div>
+
+                  <div 
+                    style={{ height: `${heightPercent}%` }}
+                    className={`w-full max-w-[28px] bg-gradient-to-t ${stat.color} transition-all duration-500 shadow-sm group-hover/bar:brightness-110`}
+                  />
+                  
+                  <div className="flex items-center justify-center space-x-1 mt-1.5 w-full">
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${stat.dot}`} />
+                    <span 
+                      className={`text-[9px] leading-tight text-center line-clamp-2 ${
+                        isDarkMode ? 'text-slate-400' : 'text-slate-600'
+                      }`} 
+                      title={stat.category}
+                    >
+                      {stat.category}
                     </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row items-center justify-around py-2 gap-3">
+            <div className="relative w-32 h-32 rounded-full shadow-inner flex items-center justify-center" style={pieGradientStyle}>
+              <div className={`w-18 h-18 rounded-full flex flex-col items-center justify-center shadow-md ${
+                isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-white text-slate-800'
+              }`}>
+                <span className="text-[9px] text-slate-400 uppercase">Tổng</span>
+                <span className="text-[11px] font-bold">{formatShortMoney(totalExpense)}</span>
+              </div>
+            </div>
 
-                    <div className="absolute -top-8 opacity-0 group-hover/bar:opacity-100 transition-opacity bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded shadow-xl pointer-events-none whitespace-nowrap z-20 border border-slate-700">
-                      <span className="font-semibold">{stat.category}</span>: {formatMoney(stat.total)}
+            <div className="flex-1 grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-1">
+              {categoryStats.map(stat => {
+                const percent = totalExpense > 0 ? ((stat.total / totalExpense) * 100).toFixed(1) : 0;
+                return (
+                  <div key={stat.category} className="flex items-center justify-between text-[11px] p-1 rounded-lg bg-slate-500/5">
+                    <div className="flex items-center space-x-1.5 truncate mr-2">
+                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${stat.dot}`} />
+                      <span className="truncate" title={stat.category}>{stat.category}</span>
                     </div>
-
-                    <div 
-                      style={{ height: `${heightPercent}%` }}
-                      className={`w-full max-w-[28px] bg-gradient-to-t ${stat.color} transition-all duration-500 shadow-sm group-hover/bar:brightness-110`}
-                    />
-                    
-                    <div className="flex items-center justify-center space-x-1 mt-1.5 w-full">
-                      <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${stat.dot}`} />
-                      <span 
-                        className={`text-[9px] leading-tight text-center line-clamp-2 ${
-                          isDarkMode ? 'text-slate-400' : 'text-slate-600'
-                        }`} 
-                        title={stat.category}
-                      >
-                        {stat.category}
-                      </span>
-                    </div>
+                    <span className="font-semibold whitespace-nowrap">{percent}%</span>
                   </div>
                 );
               })}
             </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row items-center justify-around py-2 gap-3">
-              <div className="relative w-32 h-32 rounded-full shadow-inner flex items-center justify-center" style={pieGradientStyle}>
-                <div className={`w-18 h-18 rounded-full flex flex-col items-center justify-center shadow-md ${
-                  isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-white text-slate-800'
-                }`}>
-                  <span className="text-[9px] text-slate-400 uppercase">Tổng</span>
-                  <span className="text-[11px] font-bold">{formatShortMoney(totalExpense)}</span>
-                </div>
-              </div>
+          </div>
+        )}
+      </div>
+    )}
 
-              <div className="flex-1 grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-1">
-                {categoryStats.map(stat => {
-                  const percent = totalExpense > 0 ? ((stat.total / totalExpense) * 100).toFixed(1) : 0;
-                  return (
-                    <div key={stat.category} className="flex items-center justify-between text-[11px] p-1 rounded-lg bg-slate-500/5">
-                      <div className="flex items-center space-x-1.5 truncate mr-2">
-                        <span className={`w-2 h-2 rounded-full flex-shrink-0 ${stat.dot}`} />
-                        <span className="truncate" title={stat.category}>{stat.category}</span>
-                      </div>
-                      <span className="font-semibold whitespace-nowrap">{percent}%</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+    {/* FORM NHẬP KHOẢN CHI TIÊU MỚI */}
+    <form 
+      onSubmit={handleSubmit} 
+      onKeyDown={handleFormKeyDown}
+      className={`p-2.5 rounded-xl border mb-2.5 shadow-sm transition-colors ${
+        isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+      }`}
+    >
+      <div className="space-y-2">
+        <div className="relative flex items-center">
+          <Tag className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Nhập nội dung chi tiêu (Nhấn Enter để thêm nhanh)..."
+            className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all ${
+              isDarkMode 
+                ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
+                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20'
+            }`}
+          />
         </div>
-      )}
 
-      {/* FORM NHẬP KHOẢN CHI TIÊU MỚI */}
-      <form 
-        onSubmit={handleSubmit} 
-        onKeyDown={handleFormKeyDown}
-        className={`p-2.5 rounded-xl border mb-2.5 shadow-sm transition-colors ${
-          isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'
-        }`}
-      >
-        <div className="space-y-2">
+        <div className="grid grid-cols-2 gap-2">
           <div className="relative flex items-center">
-            <Tag className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+            <DollarSign className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Nhập nội dung chi tiêu (Nhấn Enter để thêm nhanh)..."
+              value={formatCurrencyInput(amount)}
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\D/g, '');
+                setAmount(rawValue);
+              }}
+              placeholder="Số tiền (VNĐ)"
               className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all ${
                 isDarkMode 
-                  ? 'bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
+                  ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
                   : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20'
               }`}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="relative flex items-center">
-              <DollarSign className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-              <input
-                type="text"
-                value={formatCurrencyInput(amount)}
-                onChange={(e) => {
-                  const rawValue = e.target.value.replace(/\D/g, '');
-                  setAmount(rawValue);
-                }}
-                placeholder="Số tiền (VNĐ)"
-                className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all ${
-                  isDarkMode 
-                    ? 'bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500' 
-                    : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20'
-                }`}
-              />
-            </div>
-
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
-                isDarkMode 
-                  ? 'bg-slate-950 border-slate-800 text-slate-200 focus:border-indigo-500' 
-                  : 'bg-white border-slate-200 text-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20'
-              }`}
-            >
-              {DEFAULT_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center justify-between pt-0.5">
-            <div ref={datePickerRef} className="relative">
-              <button
-                type="button"
-                onClick={() => setShowDatePicker(prev => !prev)}
-                className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
-                  isDarkMode 
-                    ? 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800' 
-                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                <Calendar className="w-3 h-3 text-indigo-500" />
-                <span>{date.toLocaleDateString('vi-VN')}</span>
-              </button>
-
-              {showDatePicker && (
-                <div className="absolute left-0 top-full mt-2 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
-                  <DatePicker
-                    selected={date}
-                    onChange={(d) => {
-                      setDate(d);
-                      setShowDatePicker(false);
-                    }}
-                    inline
-                    locale="vi"
-                  />
-                </div>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={!title.trim() || !amount}
-              className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-md transition-all ${
-                !title.trim() || !amount
-                  ? 'bg-indigo-400/50 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-500 active:scale-95 shadow-indigo-500/25'
-              }`}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Thêm khoản chi</span>
-            </button>
-          </div>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none transition-all cursor-pointer ${
+              isDarkMode 
+                ? 'bg-slate-900 border-slate-700 text-slate-200 focus:border-indigo-500' 
+                : 'bg-white border-slate-200 text-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20'
+            }`}
+          >
+            {DEFAULT_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
         </div>
-      </form>
 
-      {/* DANH SÁCH CÁC KHOẢN CHI TIÊU GOM NHÓM THEO NGÀY */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {filteredExpenses.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center py-8 opacity-60">
-            <PieChart className="w-10 h-10 mb-2 text-slate-400 stroke-1" />
-            <p className="text-xs font-medium">Không tìm thấy khoản chi tiêu nào phù hợp</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc</p>
+        <div className="flex items-center justify-between pt-0.5">
+          <div ref={datePickerRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setShowDatePicker(prev => !prev)}
+              className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                isDarkMode 
+                  ? 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800' 
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Calendar className="w-3 h-3 text-indigo-500" />
+              <span>{date.toLocaleDateString('vi-VN')}</span>
+            </button>
+
+            {showDatePicker && (
+              <div className="absolute left-0 top-full mt-2 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
+                <DatePicker
+                  selected={date}
+                  onChange={(d) => {
+                    setDate(d);
+                    setShowDatePicker(false);
+                  }}
+                  inline
+                  locale="vi"
+                />
+              </div>
+            )}
           </div>
-        ) : (
-          groupedExpenses.map((group) => {
-            const groupTotal = group.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
-            return (
-              <div key={group.dateStr} className="space-y-1">
-                
-                <div className="flex items-center justify-between px-1 pt-0.5">
-                  <div className="flex items-center space-x-1.5">
-                    <Calendar className={`w-3 h-3 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
-                    <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-                      {group.dateStr}
-                    </span>
-                  </div>
-                  <span className={`text-[11px] font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Tổng ngày: <strong className="text-rose-500">{formatMoney(groupTotal)}</strong>
+          <button
+            type="submit"
+            disabled={!title.trim() || !amount}
+            className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-md transition-all ${
+              !title.trim() || !amount
+                ? 'bg-indigo-400/50 cursor-not-allowed'
+                : 'bg-indigo-600 hover:bg-indigo-500 active:scale-95 shadow-indigo-500/25'
+            }`}
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Thêm khoản chi</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    {/* DANH SÁCH CÁC KHOẢN CHI TIÊU GOM NHÓM THEO NGÀY */}
+    <div className="flex-1 overflow-y-auto pr-1 space-y-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      {filteredExpenses.length === 0 ? (
+        <div className="h-full flex flex-col items-center justify-center text-center py-8 opacity-60">
+          <PieChart className="w-10 h-10 mb-2 text-slate-400 stroke-1" />
+          <p className="text-xs font-medium">Không tìm thấy khoản chi tiêu nào phù hợp</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">Hãy thử thay đổi từ khóa tìm kiếm hoặc bộ lọc</p>
+        </div>
+      ) : (
+        groupedExpenses.map((group) => {
+          const groupTotal = group.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
+          return (
+            <div key={group.dateStr} className="space-y-1">
+              
+              <div className="flex items-center justify-between px-1 pt-0.5">
+                <div className="flex items-center space-x-1.5">
+                  <Calendar className={`w-3 h-3 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                    {group.dateStr}
                   </span>
                 </div>
+                <span className={`text-[11px] font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Tổng ngày: <strong className="text-rose-500">{formatMoney(groupTotal)}</strong>
+                </span>
+              </div>
 
-                <div className="space-y-1.5">
-                  {group.items.map((item) => {
-                    const isEditing = editingId === item.id;
+              <div className="space-y-1.5">
+                {group.items.map((item) => {
+                  const isEditing = editingId === item.id;
 
-                    return (
-                      <div 
-                        key={item.id} 
-                        className={`p-2.5 rounded-xl border transition-all flex items-center justify-between group ${
-                          isDarkMode 
-                            ? 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700' 
-                            : 'bg-white border-slate-200/80 hover:border-indigo-200 shadow-sm'
-                        }`}
-                      >
-                        {isEditing ? (
-                          <div className="flex-1 flex flex-col space-y-1.5 mr-2">
+                  return (
+                    <div 
+                      key={item.id} 
+                      className={`p-2.5 rounded-xl border transition-all flex items-center justify-between group ${
+                        isEditing 
+                          ? (isDarkMode ? 'bg-slate-900/60 border-slate-700 shadow-sm' : 'bg-white border-slate-300 shadow-sm')
+                          : (isDarkMode ? 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700' : 'bg-white border-slate-200/80 hover:border-indigo-200 shadow-sm')
+                      }`}
+                    >
+                      {isEditing ? (
+                        <div className="flex-1 flex flex-col space-y-2 mr-2">
+                          <div className="relative flex items-center">
+                            <Tag className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                             <input
                               type="text"
                               value={editTitle}
                               onChange={(e) => setEditTitle(e.target.value)}
-                              className={`w-full px-2 py-1 text-xs rounded-lg border outline-none ${
-                                isDarkMode ? 'bg-slate-950 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                              placeholder="Nhập nội dung chi tiêu..."
+                              className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none ${
+                                isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500' : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500'
                               }`}
                             />
-                            <div className="grid grid-cols-3 gap-1.5">
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="relative flex items-center">
+                              <DollarSign className={`absolute left-2.5 w-3.5 h-3.5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                               <input
                                 type="text"
                                 value={editAmount}
@@ -785,57 +787,84 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                                   const rawValue = e.target.value.replace(/\D/g, '');
                                   setEditAmount(formatCurrencyInput(rawValue));
                                 }}
-                                className={`w-full px-2 py-1 text-xs rounded-lg border outline-none ${
-                                  isDarkMode ? 'bg-slate-950 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                                placeholder="Số tiền (VNĐ)"
+                                className={`w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg border outline-none ${
+                                  isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:border-indigo-500' : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-indigo-500'
                                 }`}
                               />
-                              <select
-                                value={editCategory}
-                                onChange={(e) => setEditCategory(e.target.value)}
-                                className={`w-full px-2 py-1 text-[11px] rounded-lg border outline-none ${
-                                  isDarkMode ? 'bg-slate-950 border-slate-700 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'
+                            </div>
+
+                            <select
+                              value={editCategory}
+                              onChange={(e) => setEditCategory(e.target.value)}
+                              className={`w-full px-2.5 py-1.5 text-xs rounded-lg border outline-none cursor-pointer ${
+                                isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200 focus:border-indigo-500' : 'bg-white border-slate-200 text-slate-800 focus:border-indigo-500'
+                              }`}
+                            >
+                              {DEFAULT_CATEGORIES.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-0.5">
+                            <div ref={editDatePickerRef} className="relative">
+                              <button
+                                type="button"
+                                onClick={() => setShowEditDatePicker(prev => !prev)}
+                                className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                                  isDarkMode
+                                    ? 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
                                 }`}
                               >
-                                {DEFAULT_CATEGORIES.map((cat) => (
-                                  <option key={cat} value={cat}>{cat}</option>
-                                ))}
-                              </select>
+                                <Calendar className="w-3 h-3 text-indigo-500" />
+                                <span>{editDate.toLocaleDateString('vi-VN')}</span>
+                              </button>
 
-                              <div ref={editDatePickerRef} className="relative">
-                                <button
-                                  type="button"
-                                  onClick={() => setShowEditDatePicker(prev => !prev)}
-                                  className={`w-full px-2 py-1 text-[11px] rounded-lg border flex items-center justify-between ${
-                                    isDarkMode
-                                      ? 'bg-slate-950 border-slate-700 text-slate-200'
-                                      : 'bg-slate-50 border-slate-300 text-slate-800'
-                                  }`}
-                                >
-                                  <span>{editDate.toLocaleDateString('vi-VN')}</span>
-                                  <Calendar className="w-2.5 h-2.5 text-indigo-500" />
-                                </button>
+                              {showEditDatePicker && (
+                                <div className="absolute left-0 top-full mt-2 z-50 shadow-2xl rounded-xl overflow-hidden border border-slate-200 bg-white">
+                                  <DatePicker
+                                    selected={editDate}
+                                    onChange={(d) => {
+                                      setEditDate(d);
+                                      setShowEditDatePicker(false);
+                                    }}
+                                    inline
+                                    locale="vi"
+                                  />
+                                </div>
+                              )}
+                            </div>
 
-                                {showEditDatePicker && (
-                                  <div
-                                    className="fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50
-                                              shadow-2xl rounded-xl overflow-hidden
-                                              border border-slate-200 bg-white"
-                                  >
-                                    <DatePicker
-                                      selected={editDate}
-                                      onChange={(d) => {
-                                        setEditDate(d);
-                                        setShowEditDatePicker(false);
-                                      }}
-                                      inline
-                                      locale="vi"
-                                    />
-                                  </div>
-                                )}
-                              </div>
+                            <div className="flex items-center space-x-1">
+                              <button
+                                onClick={() => handleSaveEdit(item.id)}
+                                className={`p-1.5 rounded-lg border transition-colors ${
+                                  isDarkMode 
+                                    ? 'bg-slate-900 border-emerald-500/30 text-emerald-400 hover:bg-slate-800' 
+                                    : 'bg-white border-emerald-200 text-emerald-600 hover:bg-emerald-50'
+                                }`}
+                                title="Lưu"
+                              >
+                                <Check className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => setEditingId(null)}
+                                className={`p-1.5 rounded-lg border transition-colors ${
+                                  isDarkMode 
+                                    ? 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800' 
+                                    : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100'
+                                }`}
+                                title="Hủy"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
                             </div>
                           </div>
-                        ) : (
+                        </div>
+                      ) : (
+                        <>
                           <div className="flex-1 min-w-0 pr-2">
                             <div className="flex items-center space-x-1.5 mb-0.5">
                               <span className={`text-[10px] px-1.5 py-0.2 rounded font-medium tracking-wide ${
@@ -851,58 +880,37 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
                               -{formatMoney(item.amount)}
                             </p>
                           </div>
-                        )}
 
-                        <div className="flex items-center space-x-1">
-                          {isEditing ? (
-                            <>
-                              <button
-                                onClick={() => handleSaveEdit(item.id)}
-                                className="p-1 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors"
-                                title="Lưu"
-                              >
-                                <Check className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => setEditingId(null)}
-                                className="p-1 rounded-lg bg-slate-500/10 text-slate-400 hover:bg-slate-500/20 transition-colors"
-                                title="Hủy"
-                              >
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() => handleStartEdit(item)}
-                                className={`p-1 rounded-lg opacity-60 group-hover:opacity-100 transition-opacity ${
-                                  isDarkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-600'
-                                }`}
-                                title="Chỉnh sửa"
-                              >
-                                <Edit2 className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteWithConfirm(item)}
-                                className="p-1 rounded-lg opacity-60 group-hover:opacity-100 hover:bg-rose-500/10 text-rose-500 transition-opacity"
-                                title="Xóa"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
+                          <div className="flex items-center space-x-1">
+                            <button
+                              onClick={() => handleStartEdit(item)}
+                              className={`p-1 rounded-lg opacity-60 group-hover:opacity-100 transition-opacity ${
+                                isDarkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-600'
+                              }`}
+                              title="Chỉnh sửa"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteWithConfirm(item)}
+                              className="p-1 rounded-lg opacity-60 group-hover:opacity-100 hover:bg-rose-500/10 text-rose-500 transition-opacity"
+                              title="Xóa"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })
-        )}
-      </div>
 
+            </div>
+          );
+        })
+      )}
     </div>
-  );
+  </div>
+);
 }
