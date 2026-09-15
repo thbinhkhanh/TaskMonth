@@ -292,29 +292,30 @@ export default function ExpenseTab({ expenses, onAddExpense, onDeleteExpense, on
   return (
     <div className="flex-1 flex flex-col overflow-hidden px-4 py-2">
       
-      {/* THẺ TỔNG QUAN & CÔNG CỤ (ĐÃ GIẢM CHIỀU CAO GỌN GÀNG) */}
+      {/* THẺ TỔNG QUAN & CÔNG CỤ (ĐÃ CANH CHỈNH ĐỒNG BỘ TRÊN MOBILE) */}
       <div className={`px-3.5 py-2.5 rounded-xl mb-2.5 border shadow-sm transition-colors ${
         isDarkMode 
           ? 'bg-slate-900/80 border-slate-800 text-slate-100' 
           : 'bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border-indigo-100 text-slate-800'
       }`}>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-          <div className="flex items-center space-x-2.5">
-            <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-600 text-white'}`}>
+        <div className="flex items-center justify-between gap-2">
+          {/* Cụm thông tin tổng chi tiêu bên trái */}
+          <div className="flex items-center space-x-2.5 min-w-0">
+            <div className={`p-2 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-600 text-white'}`}>
               <Wallet className="w-4.5 h-4.5" />
             </div>
-            <div>
-              <p className={`text-[10px] font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+            <div className="min-w-0">
+              <p className={`text-[10px] font-medium uppercase tracking-wider truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                 Tổng chi tiêu
               </p>
-              <h2 className="text-xl font-bold tracking-tight leading-tight">
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight leading-tight truncate">
                 {formatMoney(totalExpense)}
               </h2>
             </div>
           </div>
 
-          {/* Cụm các nút công cụ phụ: Lọc, Biểu đồ, Xuất Excel */}
-          <div className="flex items-center space-x-1.5 self-end md:self-auto">
+          {/* Cụm các nút công cụ phụ: Lọc, Biểu đồ, Xuất Excel (Cố định cùng một hàng, canh giữa chiều dọc) */}
+          <div className="flex items-center space-x-1.5 flex-shrink-0">
             <button
               type="button"
               onClick={() => setShowFilter(prev => !prev)}
