@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { Edit2, Trash2 } from 'lucide-react';
 import { useTheme } from '../App';
 
 export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpdateTitle }) {
@@ -148,26 +147,17 @@ export default function TaskItem({ task, onToggle, onDateChange, onDelete, onUpd
               <div className="flex items-center gap-1 shrink-0 pt-0.5">
                 <button 
                   onClick={() => setIsEditing(true)}
-                  className={`p-1.5 rounded-lg transition ${
-                    isDarkMode 
-                      ? 'text-slate-400 hover:text-indigo-400 hover:bg-slate-800' 
-                      : 'text-slate-500 hover:text-indigo-600 hover:bg-slate-100'
-                  }`}
+                  className={`p-1 text-xs transition ${isDarkMode ? 'text-slate-400 hover:text-indigo-400' : 'text-slate-500 hover:text-indigo-600'}`}
                   title="Sửa công việc và ngày tháng"
                 >
-                  <Edit2 className="w-4 h-4" />
+                  ✏️
                 </button>
-                {/* Đã chỉnh lại màu sắc cho icon Xóa sang màu đỏ */}
                 <button 
                   onClick={handleDeleteClick}
-                  className={`p-1.5 rounded-lg transition ${
-                    isDarkMode 
-                      ? 'text-rose-400 hover:text-rose-300 hover:bg-rose-950/50' 
-                      : 'text-rose-500 hover:text-rose-600 hover:bg-rose-50'
-                  }`}
+                  className="text-slate-400 hover:text-rose-500 p-1 text-xs transition"
                   title="Xóa công việc"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  🗑️
                 </button>
               </div>
             </>
